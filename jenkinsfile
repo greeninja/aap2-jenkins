@@ -5,10 +5,6 @@ pipeline {
     stage('Run') {
       steps {
         echo "Installing ${pkg} to all nodes in ${inventory}"
-        sh "echo ${WORKSPACE}"
-        sh "ls -la ${WORKSPACE}"
-        sh "echo ${PKG}"
-        sh "echo ${INVENTORY}"
         sh "bash ${WORKSPACE}/scripts/start_job.sh -t ${TOKEN} -p \"${PKG}\" -i \"${INVENTORY}\""
       }
     }
