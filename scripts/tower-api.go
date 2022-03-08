@@ -35,7 +35,7 @@ func main() {
 	fmt.Println("Run:", *run)
 	fmt.Println("Watch", *watch)
 
-	fmt.Println("\nStarting....\n")
+	fmt.Println("\nStarting....")
 
 	if *run == true {
 		fmt.Println("Running")
