@@ -66,6 +66,7 @@ EOF
 )
 
 echo -e "$(date) - Confirm POST data is valid"
+echo -e "$json"
 json=$(echo -e "$yml" | jq -r)
 
 echo -e "$(date) - Send Start Job request"
