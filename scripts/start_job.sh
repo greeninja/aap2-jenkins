@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 while getopts t:p:i:h:j: flag
 do
     case "${flag}" in
@@ -34,14 +36,6 @@ then
     exit
 fi
 
-# Check for YQ
-
-if ! command -v yq &> /dev/null
-then
-    echo "yq could not be found or is not installed"
-    exit
-fi
-
 # Build Data
 ## Get inventory ID
 invId=$(echo $inventory | grep -o -P '(?<=\{).*(?=\=)')
@@ -50,15 +44,18 @@ invId=$(echo $inventory | grep -o -P '(?<=\{).*(?=\=)')
 IFS=, read -ra pkgs <<< "$packages"
 
 ## Build Post data
+pos=${pkgs[-1]}
 yml=$(cat << EOF
-extra_vars:
-  pkg_version:
-$(for i in ${pkgs[@]}; do echo "    - $i"; done)
-inventory: $invId
+{"extra_vars":
+  {"pkg_version": [
+$(for i in ${pkgs[@]}; do echo "\"$i\""; if [[ $i == $pos ]]; then echo ""; else echo ","; fi; done)
+]},
+"inventory": $invId
+}
 EOF
 )
 
-json=$(echo -e "$yml" | yq)
+json=$(echo -e "$yml" | jq)
 
 response=$(curl -s --location --request POST "https://$tower/api/v2/job_templates/$jobid/launch/" \
   --header "Authorization: Bearer $token" \
@@ -66,7 +63,7 @@ response=$(curl -s --location --request POST "https://$tower/api/v2/job_template
   --header "Accept: application/json" \
   --data-raw "$(echo $json)")
 
-echo $response | jq 
+echo $response | jq
 
 
 
