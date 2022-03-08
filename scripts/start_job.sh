@@ -66,19 +66,16 @@ EOF
 )
 
 echo -e "$(date) - Confirm POST data is valid"
-json=$(echo -e "$yml" | jq)
+json=$(echo -e "$yml" | jq -r)
 
 echo -e "$(date) - Send Start Job request"
 
-response=$(curl -s --location --request POST "https://$tower/api/v2/job_templates/$jobid/launch/" \
-  --header "Authorization: Bearer $token" \
-  --header "Content-Type: application/json" \
-  --header "Accept: application/json" \
-  --data-raw "$(echo $json)")
+# response=$(curl -s --location --request POST "https://$tower/api/v2/job_templates/$jobid/launch/" \
+#   --header "Authorization: Bearer $token" \
+#   --header "Content-Type: application/json" \
+#   --header "Accept: application/json" \
+#   --data-raw "$(echo $json)")
 
-echo -e "$(date) - Tower response"
+# echo -e "$(date) - Tower response"
 
-echo $response | jq
-
-
-
+# echo -e "$response" | jq
