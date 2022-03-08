@@ -76,6 +76,34 @@ response=$(curl -s --location --request POST "https://$tower/api/v2/job_template
   --header "Accept: application/json" \
   --data-raw "$(echo $json)")
 
-echo -e "$(date) - Tower response"
+echo -e "$(date) - Tower response - Job id $(echo "$response" | jq '.job')"
 
-echo "$response" | jq '.'
+# Check on job function
+
+echo -e "$(date) - Getting Job Status"
+running_job=$(echo "$response" | jq '.job')
+max=180
+c=1
+while [ $c -le $max ]; do
+  sleep 10
+  echo "$(date) - Check $c/180"
+  check_res=$(curl -s --location --request GET "https://$tower/api/v2/jobs/$running_job/" \
+    --header "Authorization: Bearer $token" \
+    --header "Accept: application/json")
+  failed=$(echo "$check_res" | jq '.failed')
+  status=$(echo "$check_res" | jq -r '.status')
+  if [[ $failed == "false" ]]; then
+    echo "$(date) - Job status... $status"
+    if [[ $status == "successful" ]]; then
+      echo "$(date) - Job completed"
+      break
+    fi
+  else
+    echo "$(date) - Job $running_job Failed"
+    echo "$(date) - Check https://$tower/#/jobs/playbook/$running_job for further information"
+    exit 1
+  fi
+  c=$(( c + 1 ))
+done
+
+echo "$(date) - Success"
