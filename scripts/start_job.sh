@@ -101,6 +101,7 @@ while [ $c -le $max ]; do
   else
     echo "$(date) - Job $running_job Failed"
     echo "$(date) - Check https://$tower/#/jobs/playbook/$running_job for further information"
+    echo "$(date) - Failed"
     exit 1
   fi
   c=$(( c + 1 ))
