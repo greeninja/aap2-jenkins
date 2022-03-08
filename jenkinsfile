@@ -5,41 +5,8 @@ pipeline {
     stage('Run') {
       steps {
         echo "Installing ${pkg} to all nodes in ${inventory}"
-        script {
-          def url = "https://192.168.33.166/api/v2/job_templates/11/launch/"
-          def token = "cFsdexwJ2H4xHf343pBKaRNRWRKupz"
-          def pkg = "test1,test2"
-          def pkg_arr = pkg.split(',')
-          String pkgs = new groovy.json.JsonBuilder(pkg_arr).toString()
-          println pkgs
-          javax.net.ssl.HttpsURLConnection.setDefaultHostnameVerifier(
-            new javax.net.ssl.HostnameVerifier(){
-
-                public boolean verify(String hostname,
-                      javax.net.ssl.SSLSession sslSession) {
-                    return true;
-                }
-            });
-
-          def post = new URL("${url}").openConnection();
-          def message = "{\"extra_vars\": {\"pkg_version\": ${pkgs}},\"inventory\": 2}"
-          post.setRequestMethod("POST")
-          post.setDoOutput(true)
-          post.setRequestProperty("Content-Type", "application/json")
-          post.setRequestProperty("Authorization","Bearer ${token}")
-          post.setRequestProperty("accept","application/json")
-          post.getOutputStream().write(message.getBytes("UTF-8"));
-          def postRC = post.getResponseCode();
-          println(postRC);
-          if (postRC.equals(201)) {
-                  def jsonSlurper = new groovy.json.JsonSlurper()
-                  def job = jsonSlurper.parseText(post.getInputStream().getText())
-                  println "Started job id ${job.job}"
-                  println "API url = ${job.url}"
-                  println "\n\n\n"
-                  println job
-          }
-        }
+        sh "echo ${WORKSPACE}"
+        sh "ls -la ${WORKSPACE}"
       }
     }
   }
