@@ -19,10 +19,10 @@ echo "Tower Host: $tower"
 echo "Job ID: $jobid"
 
 
-curl -x POST "https://$tower/api/v2/job_templates/$jobid/launch/"
-  --header "Authorization: Bearer $token"
-  --header 'Content-Type: application/json'
-  --header 'Accept: application/json'
+curl -x POST "https://$tower/api/v2/job_templates/$jobid/launch/" \
+  --header "Authorization: Bearer $token" \
+  --header 'Content-Type: application/json' \
+  --header 'Accept: application/json' \
   --data-raw '{
   "extra_vars": {
     "pkg_version": [
