@@ -55,7 +55,7 @@ echo -e "$(date) - Build JSON POST data"
 
 ## Build Post data
 pos=${pkgs[-1]}
-json=$(cat << EOF
+yml=$(cat << EOF
 {"extra_vars":
   {"pkg_version": [
 $(for i in ${pkgs[@]}; do echo "\"$i\""; if [[ $i == $pos ]]; then echo ""; else echo ","; fi; done)
