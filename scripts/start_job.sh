@@ -65,9 +65,8 @@ $(for i in ${pkgs[@]}; do echo "\"$i\""; if [[ $i == $pos ]]; then echo ""; else
 EOF
 )
 
-# echo -e "$(date) - Confirm POST data is valid"
-
-#json=$(echo -e "$yml" | jq -r)
+ echo -e "$(date) - Confirm POST data is valid"
+json=$(echo -e "$yml" | jq '.')
 
 echo -e "$(date) - Send Start Job request"
 
@@ -79,4 +78,4 @@ response=$(curl -s --location --request POST "https://$tower/api/v2/job_template
 
 echo -e "$(date) - Tower response"
 
-echo "$response" | jq
+echo "$response" | jq '.'
