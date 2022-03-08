@@ -79,4 +79,4 @@ response=$(curl -s --location --request POST "https://$tower/api/v2/job_template
 
 echo -e "$(date) - Tower response"
 
-# echo -e "$response" | jq
+echo "$response" | jq
