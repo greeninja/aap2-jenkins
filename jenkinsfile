@@ -9,7 +9,7 @@ pipeline {
         sh "ls -la ${WORKSPACE}"
         sh "echo ${PKG}"
         sh "echo ${INVENTORY}"
-        sh "bash ${WORKSPACE}/scripts/start_job.sh -t ${TOKEN} -p ${PKG} -i ${INVENTORY}"
+        sh "bash ${WORKSPACE}/scripts/start_job.sh -t ${TOKEN} -p \"${PKG}\" -i \"${INVENTORY}\""
       }
     }
   }
