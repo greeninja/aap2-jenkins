@@ -55,7 +55,7 @@ echo -e "$(date) - Build JSON POST data"
 
 ## Build Post data
 pos=${pkgs[-1]}
-yml=$(cat << EOF
+json=$(cat << EOF
 {"extra_vars":
   {"pkg_version": [
 $(for i in ${pkgs[@]}; do echo "\"$i\""; if [[ $i == $pos ]]; then echo ""; else echo ","; fi; done)
@@ -65,18 +65,18 @@ $(for i in ${pkgs[@]}; do echo "\"$i\""; if [[ $i == $pos ]]; then echo ""; else
 EOF
 )
 
-echo -e "$(date) - Confirm POST data is valid"
-echo -e "$yml"
-json=$(echo -e "$yml" | jq -r)
+# echo -e "$(date) - Confirm POST data is valid"
+
+#json=$(echo -e "$yml" | jq -r)
 
 echo -e "$(date) - Send Start Job request"
 
-# response=$(curl -s --location --request POST "https://$tower/api/v2/job_templates/$jobid/launch/" \
-#   --header "Authorization: Bearer $token" \
-#   --header "Content-Type: application/json" \
-#   --header "Accept: application/json" \
-#   --data-raw "$(echo $json)")
+response=$(curl -s --location --request POST "https://$tower/api/v2/job_templates/$jobid/launch/" \
+  --header "Authorization: Bearer $token" \
+  --header "Content-Type: application/json" \
+  --header "Accept: application/json" \
+  --data-raw "$(echo $json)")
 
-# echo -e "$(date) - Tower response"
+echo -e "$(date) - Tower response"
 
 # echo -e "$response" | jq
